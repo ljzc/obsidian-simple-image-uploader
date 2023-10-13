@@ -23,8 +23,8 @@ export default class MyPlugin extends Plugin {
 	uploader: Uploader;
 	async onload() {
 		this.singleLinkParser = new SimpleWikiLinkParser(this.app.vault);
-		this.reinitUploader();
 		await this.loadSettings();
+		this.reinitUploader();
 		this.addCommand({
 			id: 'show-all-files',
 			name: 'Show All Files',
