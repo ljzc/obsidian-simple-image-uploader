@@ -23,12 +23,7 @@ export default class MyPlugin extends Plugin {
 	uploader: Uploader;
 	async onload() {
 		this.singleLinkParser = new SimpleWikiLinkParser(this.app.vault);
-		this.uploader = new AliyunUploader({
-			accessKeyId: 'LTAI5tKcWBhSgY3vcnEvXfvd',
-			accessKeySecret: '8g7ti1wduUVecii4zwTErbcmrjaJwj',
-			bucket: 'ljzc-obsidian',
-			region: 'oss-cn-beijing'
-		});
+		this.reinitUploader();
 		await this.loadSettings();
 		this.addCommand({
 			id: 'show-all-files',
