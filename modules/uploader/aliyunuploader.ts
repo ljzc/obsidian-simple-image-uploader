@@ -1,4 +1,5 @@
 import { Uploader } from "./uploader";
+//@ts-ignore
 import OSS from "ali-oss";
 
 export interface AliyunUploaderSettings {
@@ -26,7 +27,7 @@ export class AliyunUploader implements Uploader {
 
 	async upload(file: Blob, fileName: string): Promise<string>{
 		const filePath = this.settings.path ? `${this.settings.path}/${fileName}` : fileName;
-		return this.client.put(filePath, file).then((res) => {
+		return this.client.put(filePath, file).then((res: any) => {
 			return res.url;
 		});
 

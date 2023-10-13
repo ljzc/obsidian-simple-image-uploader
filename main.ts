@@ -2,7 +2,6 @@ import { Notice, Plugin, TFile, PluginSettingTab, App, Setting} from 'obsidian';
 import { SingleLinkParser, SimpleWikiLinkParser } from './modules/linkimageparser';
 import { Uploader } from './modules/uploader/uploader';
 import { AliyunUploader, AliyunUploaderSettings } from './modules/uploader/aliyunuploader';
-
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -65,12 +64,12 @@ export default class MyPlugin extends Plugin {
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 	}
 
-	registerVaultEvent(){
-		const { vault } = this.app;
-		vault.on('create', (file) => {
-			console.log('create', file);
-		});
-	}
+	// registerVaultEvent(){
+	// 	const { vault } = this.app;
+	// 	vault.on('create', (file) => {
+	// 		new Notice(`File ${file.path} created!`);
+	// 	});
+	// }
 
 	registerWorkSpaceEvent(){
 		const beginUpload = async (image: TFile) => {
@@ -83,20 +82,35 @@ export default class MyPlugin extends Plugin {
 		}
 		const { workspace } = this.app;
 		workspace.on('editor-change', (editor, info) => {
-			console.log('editor-change', editor, info);
 			if(info.file && info.file.parent){
 				const cursor = editor.getCursor();
 				const textBeforeCursor = editor.getLine(cursor.line).slice(0, cursor.ch);
-				const imageLink = this.singleLinkParser.parseLink(textBeforeCursor, info.file.parent);
+				let imageLink = this.singleLinkParser.parseLink(textBeforeCursor, info.file.parent);
+				let line = cursor.line;
+				if (!imageLink) {
+					if (editor.lastLine() !== 0){
+						const lastLineText = editor.getLine(editor.lastLine() - 1);
+						const lastLineImageLink = this.singleLinkParser.parseLink(lastLineText, info.file.parent);
+						if (lastLineImageLink) {
+							imageLink = lastLineImageLink;
+							line = editor.lastLine() - 1;
+						}
+					}
+					
+				}
 				if (imageLink) {
+					const targetImageLink = imageLink;
+					const targetLine = line;
 					beginUpload(imageLink.file).then(({url, fileName}) => {
-						editor.replaceRange(`![${fileName}](${url})`, {line: cursor.line, ch: imageLink.begin}, {line: cursor.line, ch: imageLink.end});
+						editor.replaceRange(`![${fileName}](${url})`, {line: targetLine, ch: targetImageLink.begin}, {line: targetLine, ch: targetImageLink.end});
 						new Notice('Image uploaded!');
-						this.app.vault.delete(imageLink.file);
+						this.app.vault.delete(targetImageLink.file);
 					})
 				}
 			}
 		});
+
+		
 	}
 
 	reinitUploader(){
