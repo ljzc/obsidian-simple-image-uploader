@@ -1,0 +1,11 @@
+{
+	"id": "sample-image-uploder",
+	"name": "Sample Image Uploader",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "This is a sample plugin that uplode image to oss.",
+	"author": "Obsidian",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
