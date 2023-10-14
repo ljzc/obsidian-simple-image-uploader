@@ -105,6 +105,9 @@ export default class MyPlugin extends Plugin {
 						editor.replaceRange(`![${fileName}](${url})`, {line: targetLine, ch: targetImageLink.begin}, {line: targetLine, ch: targetImageLink.end});
 						new Notice('Image uploaded!');
 						this.app.vault.delete(targetImageLink.file);
+					}).catch((err) => {
+						console.log(err);
+						new Notice('Image upload failed!');
 					})
 				}
 			}

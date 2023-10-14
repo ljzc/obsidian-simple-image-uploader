@@ -17,15 +17,19 @@ export class AliyunUploader implements Uploader {
 	private settings: AliyunUploaderSettings;
 	constructor(settings: AliyunUploaderSettings) {
 		this.settings = settings;
-		this.client = new OSS({
-			region: settings.region,
-			accessKeyId: settings.accessKeyId,
-			accessKeySecret: settings.accessKeySecret,
-			bucket: settings.bucket
-		});
+		this.client = null
 	}
 
 	async upload(file: Blob, fileName: string): Promise<string>{
+		if (this.client === null){
+            this.client = new OSS({
+                region: this.settings.region,
+                accessKeyId: this.settings.accessKeyId,
+                accessKeySecret: this.settings.accessKeySecret,
+                bucket: this.settings.bucket
+            });
+		}
+
 		const filePath = this.settings.path ? `${this.settings.path}/${fileName}` : fileName;
 		return this.client.put(filePath, file).then((res: any) => {
 			return res.url;
