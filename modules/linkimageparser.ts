@@ -22,7 +22,8 @@ export interface SingleLinkParser {
  * 
  */
 export class SimpleWikiLinkParser implements SingleLinkParser {
-	private static readonly WikiImageRegex = /^!\[\[([^\]]+)\]\]$/g;
+	private static readonly WikiImageRegex = /!\[\[([^\]]+)\]\]$/g;
+	private static readonly ImageExtensionRegex = /\.(png|jpg|jpeg|gif|bmp|webp|svg)$/g;
 	private vault: Vault;
 
 	constructor(vault: Vault) {
@@ -33,7 +34,7 @@ export class SimpleWikiLinkParser implements SingleLinkParser {
 		const match = RegExp(SimpleWikiLinkParser.WikiImageRegex).exec(text);
 		if (match && match.index !== undefined) {
 			const link = match[1];
-			if (link.startsWith('http://') || link.startsWith('https://')) {
+			if (link.startsWith('http://') || link.startsWith('https://') || link.match(SimpleWikiLinkParser.ImageExtensionRegex) === null) {
 				return undefined;
 			}
 			const file = this.findLinkFile(link, currentFolder);

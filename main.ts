@@ -97,6 +97,11 @@ export default class MyPlugin extends Plugin {
 					const targetImageLink = imageLink;
 					const targetLine = line;
 					beginUpload(imageLink.file).then(({url, fileName}) => {
+						const textToReplace = editor.getLine(targetLine).slice(targetImageLink.begin, targetImageLink.end);
+						if (textToReplace !== targetImageLink.source) {
+							new Notice('Image link changed!');
+							return;
+						}
 						editor.replaceRange(`![${fileName}](${url})`, {line: targetLine, ch: targetImageLink.begin}, {line: targetLine, ch: targetImageLink.end});
 						new Notice('Image uploaded!');
 						this.app.vault.delete(targetImageLink.file);
