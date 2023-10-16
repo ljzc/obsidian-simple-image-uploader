@@ -1,10 +1,10 @@
 {
-	"id": "sample-image-uploder",
-	"name": "Sample Image Uploader",
+	"id": "simple-image-uploder",
+	"name": "Simple Image Uploader",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "This is a sample plugin that uplode image to oss.",
-	"author": "Obsidian",
+	"description": "uplode image to alibaba cloud oss from your clipboard.",
+	"author": "ljzc",
 	"authorUrl": "",
 	"fundingUrl": "",
 	"isDesktopOnly": false
