@@ -1,5 +1,6 @@
-import { Vault, TFile, TFolder } from 'obsidian';
-
+import {  TFile, TFolder } from 'obsidian';
+import { IMAGE_EXTENTION_REGEX, WIKI_IMAGE_REGEX } from './constants';
+import { FileSearcher } from './filesearcher/filesearcher';
 export interface ImageLink {
 	file: TFile;
 	source: string;
@@ -22,29 +23,25 @@ export interface SingleLinkParser {
  * 
  */
 export class SimpleWikiLinkParser implements SingleLinkParser {
-	private static readonly WikiImageRegex = /!\[\[([^\]]+)\]\]$/g;
-	private static readonly ImageExtensionRegex = /\.(png|jpg|jpeg|gif|bmp|webp|svg)$/g;
-	private vault: Vault;
-
-	constructor(vault: Vault) {
-		this.vault = vault;
+	constructor(private fileManager: FileSearcher) {
 	}
 
 	parseLink(text: string, currentFolder: TFolder): ImageLink | undefined {
-		const match = RegExp(SimpleWikiLinkParser.WikiImageRegex).exec(text);
-		if (match && match.index !== undefined) {
+		const match = RegExp(WIKI_IMAGE_REGEX).exec(text);
+		if (match?.index !== undefined) {
 			const link = match[1];
-			if (link.startsWith('http://') || link.startsWith('https://') || link.match(SimpleWikiLinkParser.ImageExtensionRegex) === null) {
+			if (link.startsWith('http://') || link.startsWith('https://') || link.match(IMAGE_EXTENTION_REGEX) === null) {
 				return undefined;
 			}
 			const file = this.findLinkFile(link, currentFolder);
 			if (file) {
-			return {
-				file: file,
-				source: match[0],
-				begin: match.index,
-				end: match.index + match[0].length
-			};}
+				return {
+					file,
+					source: match[0],
+					begin: match.index,
+					end: match.index + match[0].length
+				};
+			}
 		}
 	}
 
@@ -54,19 +51,16 @@ export class SimpleWikiLinkParser implements SingleLinkParser {
 	 * @param currentFolder 
 	 * @returns 
 	 */
-	private findLinkFile(encodedLink: string, currentFolder: TFolder): TFile | null {
+	private findLinkFile(encodedLink: string, currentFolder: TFolder): TFile | undefined {
 		const link = decodeURI(encodedLink);
-		const files = this.vault.getFiles();
-		for (const file of files) {
+		let file = this.fileManager.FindFileByName(link) ?? this.fileManager.FindFileByPath(link);
+		if (!file){
 			const normalizedPath = this.normalizeLink(link, currentFolder);
-			if (normalizedPath !== null && file.path === normalizedPath) {
-				return file;
-			}
-			if (file.name === link || file.path === link) {
-				return file;
+			if(normalizedPath !== null){
+				file = this.fileManager.FindFileByPath(normalizedPath);
 			}
 		}
-		return null;
+		return file;
 	}
 
 	private normalizeLink(link: string, currentFolder: TFolder): string | null {
