@@ -1,4 +1,4 @@
-# obsidian-sample-image-uploader
+# obsidian-simple-image-uploader
 
 The plug-in can automatically upload images to the Alibaba Cloud oss when inserting images.
 
