@@ -11,5 +11,6 @@ Supports both desktop and mobile obsidian.
 
 
 
-https://github.com/ljzc/obsidian-simple-image-uploader/assets/52886379/b5c06c9c-c677-44a9-9cec-ec1370b57449
+https://github.com/ljzc/obsidian-simple-image-uploader/assets/52886379/598dbcc6-a6be-43ca-87f1-6963cadfdf5e
+
 
