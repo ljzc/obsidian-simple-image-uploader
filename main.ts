@@ -2,6 +2,7 @@ import { Notice, Plugin, TFile, PluginSettingTab, App, Setting} from 'obsidian';
 import { SingleLinkParser, SimpleWikiLinkParser } from './modules/linkimageparser';
 import { Uploader } from './modules/uploader/uploader';
 import { AliyunUploader, AliyunUploaderSettings } from './modules/uploader/aliyunuploader';
+import { LazyImageSearcher } from 'modules/filesearcher';
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -22,7 +23,7 @@ export default class MyPlugin extends Plugin {
 	singleLinkParser: SingleLinkParser;
 	uploader: Uploader;
 	async onload() {
-		this.singleLinkParser = new SimpleWikiLinkParser(this.app.vault);
+		this.singleLinkParser = new SimpleWikiLinkParser(new LazyImageSearcher(this.app.vault));
 		await this.loadSettings();
 		this.reinitUploader();
 		this.addCommand({
