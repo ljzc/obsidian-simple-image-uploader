@@ -9,7 +9,7 @@ Supports both desktop and mobile obsidian.
 ![config](https://github.com/ljzc/obsidian-simple-image-uploader/assets/52886379/ba8a7017-3e16-4f15-b9f2-cd124d2ed220)
 
 
-
+## demo
 
 https://github.com/ljzc/obsidian-simple-image-uploader/assets/52886379/598dbcc6-a6be-43ca-87f1-6963cadfdf5e
 
