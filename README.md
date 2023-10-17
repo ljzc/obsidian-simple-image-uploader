@@ -6,8 +6,8 @@ Supports both desktop and mobile obsidian.
 
 ## prerequisites
 Before using the plugin for image uploading, you need to set up cross-domain resource sharing (CORS) for the bucket to which the image is uploaded. The related documentions are as follow:
-- Chinese mainland: https://www.alibabacloud.com/help/en/oss/developer-reference/installation#section-lc9-9ju-8da
-- International: https://help.aliyun.com/zh/oss/developer-reference/installation?spm=a2c4g.11186623.0.i7#section-lc9-9ju-8da
+- Chinese mainland: https://help.aliyun.com/zh/oss/developer-reference/installation?spm=a2c4g.11186623.0.i7#section-lc9-9ju-8da
+- International: https://www.alibabacloud.com/help/en/oss/developer-reference/installation#section-lc9-9ju-8da
 
 ## config
 
