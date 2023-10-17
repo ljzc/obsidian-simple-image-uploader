@@ -27,31 +27,34 @@ export default class MyPlugin extends Plugin {
 		await this.loadSettings();
 		this.reinitUploader();
 		this.addCommand({
-			id: 'show-all-files',
-			name: 'Show All Files',
-			callback: () => {
-				const files = this.app.vault.getFiles();
-				for (const file of files) {
-					console.log(file);
-				}
-			}
-		});
-		this.addCommand({
-			id: 'insert-image',
-			name: 'Insert Image',
-			callback: () => {
+			id: 'upload-and-insert-image',
+			name: 'Upload And Insert Image',
+			icon: 'image-plus',
+			editorCallback: (editor) => {
 				const inputElement = document.createElement('input');
 				inputElement.style.display = 'none';
 				document.body.appendChild(inputElement);
 				inputElement.type = 'file';
 				inputElement.accept = 'image/*';
+				inputElement.multiple = true;
 				inputElement.click();
 				inputElement.onchange = async () => {
-					const file = inputElement.files?.item(0);
-					if (file) {
-						console.log(file);
-						document.body.removeChild(inputElement);
+					for(const file of Array.from(inputElement.files ?? [])){
+						if (file) {
+							const fileName = file.name;
+							new Notice('Image selected! Begin uploading...');
+							this.uploader.upload(file, fileName).then((url) => {
+								const cursor = editor.getCursor();
+								editor.replaceRange(`![${fileName}](${url})`, cursor);
+
+								new Notice('Image uploaded!');
+							}).catch((err) => {
+								new Notice(`Image upload failed : ${err}`);
+							});
+						}
 					}
+					
+					document.body.removeChild(inputElement);
 				}
 			}
 		});
